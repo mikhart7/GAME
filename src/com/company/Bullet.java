@@ -1,6 +1,6 @@
 package com.company;
 public  class Bullet extends Ship {
-boolean b=true;
+boolean b=false;
     public Bullet(int x, int y,int dx,int dy) {
         super(x, y);
         this.dx=dx;

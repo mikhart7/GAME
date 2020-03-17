@@ -4,7 +4,7 @@ public class Ship {
     public int dx= 4;
     int dy;
     boolean b = true;
-    Bullet kk [] = new Bullet[30];
+    Bullet shipbulleys [] = new Bullet[30];
     int  c = 0;
 
 

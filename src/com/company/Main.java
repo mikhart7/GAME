@@ -20,7 +20,7 @@ public class Main extends JPanel implements ActionListener  {
         int c = 0;
         int n=0;
         boolean b = false;
-        int s = 0;
+
 MouseListener mouse = new MouseListener() {
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -88,8 +88,8 @@ MouseListener mouse = new MouseListener() {
             g.drawImage(imgfon, player.getmapX() + i * frame.getWidth(), 0, frame.getWidth(), frame.getHeight(), null);
         }
         g.setColor(Color.red);
-        g.fillRect(300, 1000, 300 - 100 * n, 20);
-        g.drawImage(f, player.getmapX() + 4 * frame.getWidth() - 2000, 700, 300, 300, null);
+        g.fillRect(300, 1000, 300 - 60 * n, 20);
+        //g.drawImage(f, player.getmapX() + 4 * frame.getWidth() - 2000, 700, 300, 300, null);
 
         if (-player.getmapX() % 500 == 0 && -player.getmapX()<=2*frame.getWidth()) {
             k++;
@@ -102,15 +102,19 @@ MouseListener mouse = new MouseListener() {
         }
 
         if (-player.getmapX() % 100 == 0 && -player.getmapX()<=3.5*frame.getWidth()) {
+
             c++;
+            bullets[c].b=true;
         }
 
 
-        if (-player.getmapX() % 300 == 0 ) {
+        if (-player.getmapX() % 150 == 0 ) {
             for (int i = 0; i <= k; i++) {
                 if (ships[i].b == true) {
+
                     ships[i].c++;
-                }
+                    ships[i].shipbulleys[ships[i].c].b=true;
+            }
 
             }
         }
@@ -118,16 +122,16 @@ MouseListener mouse = new MouseListener() {
 
         g.setColor(Color.YELLOW);
         for (int i = 0; i <= k; i++) {
-            for (int j = 0; j < ships[i].kk.length; j++) {
-                if (ships[i].kk[j].x > -100) {
+            for (int j = 0; j < ships[i].shipbulleys.length; j++) {
+                if (ships[i].shipbulleys[j].x > -100) {
                     if (j <= ships[i].c ) {
-                        if(ships[i].kk[j].b == true) {
-                            g.fillOval(ships[i].kk[j].x, ships[i].kk[j].y, 10, 10);
+                        if(ships[i].shipbulleys[j].b == true) {
+                            g.fillOval(ships[i].shipbulleys[j].x, ships[i].shipbulleys[j].y, 10, 10);
                         }
 
                     }
                     else {
-                        ships[i].kk[j].x = ships[i].x + 10;
+                        ships[i].shipbulleys[j].x = ships[i].x + 10;
                     }
                 }
 
@@ -141,14 +145,18 @@ MouseListener mouse = new MouseListener() {
         g.setColor(Color.red);
         for (int i = 0; i < bullets.length; i++) {
             if (bullets[i].x < 2000) {
-                if (i <= c) {
-                    g.fillOval(bullets[i].x, bullets[i].y, 10, 10);
+                if (i <= c ) {
+                    if(bullets[i].b==true) {
+                        g.fillOval(bullets[i].x, bullets[i].y, 10, 10);
+                    }
                 } else {
                     bullets[i].x = player.getX() + 70;
                     bullets[i].y = player.getY() + 45;
                 }
             }
+
         }
+
         g.drawImage(r,player.getmapX() + 4 * frame.getWidth()+500, 900, 200, 200,null);
         g.drawImage(imgpl, player.getX(), player.getY(), 100, 100, null);
 
@@ -157,6 +165,7 @@ MouseListener mouse = new MouseListener() {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         if (b == true) {
             if(player.g % 2 == 0) {
                 player.mapmove();
@@ -164,8 +173,8 @@ MouseListener mouse = new MouseListener() {
                 if (ships[0] == null) {
                     for (int i = 0; i < ships.length; i++) {
                         ships[i] = new Ship(2000, (int) (Math.random() * 1000));
-                        for (int j = 0; j < ships[i].kk.length; j++) {
-                            ships[i].kk[j] = new Bullet(ships[i].x + 10, ships[i].y + 45, -7, 0);
+                        for (int j = 0; j < ships[i].shipbulleys.length; j++) {
+                            ships[i].shipbulleys[j] = new Bullet(ships[i].x + 10, ships[i].y + 45, -7, 0);
                         }
                     }
                 }
@@ -175,7 +184,9 @@ MouseListener mouse = new MouseListener() {
                         bullets[i] = new Bullet(player.getX() + 70, player.getY() + 45, 7, -333);
                     }
                 }
-
+                if(c==0) {
+                    bullets[c].b = true;
+                }
                 if (bullets[c].dy == -333) {
                     bullets[c].dy = player.t;
                 }
@@ -186,30 +197,35 @@ MouseListener mouse = new MouseListener() {
                 for (int i = 0; i <= k; i++) {
                     ships[i].move();
                     for (int j = 0; j <= ships[i].c; j++) {
-                        ships[i].kk[j].move();
+                        ships[i].shipbulleys[j].move();
                     }
 
                 }
 
                 for (int i = 0; i <= k; i++) {
                     for (int j = 0; j <= c; j++) {
-                        if (ships[i].distance(bullets[j].x, bullets[j].y) <= 50) {
+                        if (ships[i].distance(bullets[j].x, bullets[j].y) <= 50 && bullets[j].b==true && ships[i].b==true) {
+                            bullets[j].b=false;
                             ships[i].b = false;
+
                         }
                     }
+
+
+
                     if (ships[i].x < -110 && ships[i].b == true) {
                         //   timer.stop();
                     }
                 }
-                //System.out.println(n);
-                if (n == 3) {
+                System.out.println(n);
+                if (n == 5) {
                    //  player.b = false;
                 }
 
                 for (int i = 0; i <= k; i++) {
                     for (int j = 0; j <= ships[i].c; j++) {
-                        if (player.distance(ships[i].kk[j].x, ships[i].kk[j].y) <= 50 && ships[i].kk[j].b == true) {
-                            ships[i].kk[j].b = false;
+                        if (player.distance(ships[i].shipbulleys[j].x, ships[i].shipbulleys[j].y) <= 50 && ships[i].shipbulleys[j].b == true) {
+                            ships[i].shipbulleys[j].b = false;
                             n++;
                         }
                     }
