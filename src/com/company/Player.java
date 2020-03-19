@@ -1,7 +1,5 @@
 package com.company;
 
-import com.sun.javafx.scene.traversal.Direction;
-
 import java.awt.event.KeyEvent;
 
 public class Player {
@@ -13,7 +11,7 @@ public class Player {
     int t=0;
     boolean b = true;
     int g=0;
-    private Direction playerDirection=Direction.NEXT;
+    private Direction playerDirection = Direction.LEFT;
     private KeyEvent e;
 
     public void keyPressed(KeyEvent e) {
