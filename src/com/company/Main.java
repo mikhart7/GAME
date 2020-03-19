@@ -235,6 +235,21 @@ MouseListener mouse = new MouseListener() {
 
                 if (player.getX()-50 >= player.getmapX() + 4 * frame.getWidth()+500 || player.b == false) {
                     timer.stop();
+                    
+                    // Dispose current frame
+                    this.frame.setVisible(false);
+                    this.frame.dispose();
+
+                    // Make a new one here
+                    // it better to make one more class for dialog window
+                    // when main game will be starting
+                    this.frame = new JFrame("JustGame");
+                    this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    this.frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    this.frame.setUndecorated(true);
+                    this.frame.add(new Main(frame));
+                    this.frame.setVisible(true);
+
                 }
             }
 
