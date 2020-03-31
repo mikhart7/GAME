@@ -5,18 +5,18 @@ import com.sun.javafx.scene.traversal.Direction;
 import java.awt.event.KeyEvent;
 
 public class Player {
-    private int x = 50;
-    private int y = 500;
-    private int speed1 = 5;
-    int mapX = 0;
-    private int speedMap = 1;
+    private int x = 50;     // координаты и скорость
+    private int y = 500;    //  игрока
+    private int speed1 = 5;  //
+    int mapX = 0;             //  фона
+    private int speedMap = 1;  //
     int t=0;
-    boolean b = true;
-    int g=0;
-    private Direction playerDirection=Direction.NEXT;
-    private KeyEvent e;
+    boolean b = true;   // отвечает за существование игрока (сбит или нет)
+    int g=0;  // отвечает за количество пуль
+    int p=0;  // отвечает за паузу
+    private Direction playerDirection=Direction.NEXT; // энум - переменная, которая может иметь несколько значений
 
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) {          // обработка нажатия клавиш
         int key = e.getKeyCode();
         if(key == KeyEvent.VK_A ) {
             playerDirection = Direction.LEFT;
@@ -36,11 +36,15 @@ public class Player {
         if(key == KeyEvent.VK_SPACE){
             g++;
         }
+        if(key == KeyEvent.VK_P){
+            p++;
+        }
+
 
     }
 
 
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e) {  //
         playerDirection=Direction.NEXT;
         t=0;
 
@@ -66,7 +70,7 @@ public class Player {
                 }
                 break;
             case RIGHT:
-                if (x<1711) {
+                if (x<1811) {
                     x += speed1;
                 }
                 break;
@@ -75,23 +79,30 @@ public class Player {
         }
     }
 
-    public void mapmove(){
-
+    public void mapmove(){     // метод движения фона
         mapX-=speedMap;
     }
 
 
     public int getX() {
         return x;
-    }
-
+    }         //  геттеры координат
     public int getY() {
         return y;
-    }
+    }        //  игрока и
     public int getmapX() {
         return mapX;
-    }
-    public int distance(int x,int y){
+    }  //  фона
+    public int distance(int x,int y){   // функция, возвращающая расстояние до игрока
         return (int)Math.sqrt((this.x+50-x)*(this.x+50-x)+(this.y+50-y)*(this.y+50-y));
+    }
+    void replay(){   // "обнуление" всех переменных для новой игры
+        mapX=0;
+        x=50;
+        y=500;
+        t=0;
+        g=0;
+        p=0;
+        b=true;
     }
 }

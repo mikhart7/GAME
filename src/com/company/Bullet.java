@@ -7,10 +7,12 @@ boolean b=false;
         this.dy=dy;
     }
 
-    @Override
+   // @Override
     public void move() {
         x += dx;
         y+=dy;
     }
-
+    void replay(){
+        b=false;
+    }
 }
