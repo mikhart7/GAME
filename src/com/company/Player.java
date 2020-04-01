@@ -10,7 +10,7 @@ public class Player {
     private int speed1 = 5;  //
     int mapX = 0;             //  фона
     private int speedMap = 1;  //
-    int t=0;
+    int t=0;      // показывает направление игрока, чтобы пуля летела по инерции
     boolean b = true;   // отвечает за существование игрока (сбит или нет)
     int g=0;  // отвечает за количество пуль
     int p=0;  // отвечает за паузу
@@ -18,8 +18,8 @@ public class Player {
 
     public void keyPressed(KeyEvent e) {          // обработка нажатия клавиш
         int key = e.getKeyCode();
-        if(key == KeyEvent.VK_A ) {
-            playerDirection = Direction.LEFT;
+        if(key == KeyEvent.VK_A ) {                // изменение playerDirection в зависимости
+            playerDirection = Direction.LEFT;      // от нажатой клавиши
         }
         if(key == KeyEvent.VK_D) {
             playerDirection = Direction.RIGHT;
@@ -44,7 +44,7 @@ public class Player {
     }
 
 
-    public void keyReleased(KeyEvent e) {  //
+    public void keyReleased(KeyEvent e) {  //  обработка отпускания клавиш(реализовано нажатие)
         playerDirection=Direction.NEXT;
         t=0;
 
@@ -52,15 +52,15 @@ public class Player {
 
 
 
-    public void move() {
-        switch(playerDirection) {
-            case UP:
+    public void move() {                        // метод движения игрока
+        switch(playerDirection) {               // If для ограничения перемещения,
+            case UP:                            // чтобы корабль не выходил за пределы экрана
                 if(y>2) {
                     y -= speed1;
                 }
                 break;
             case DOWN:
-                if (y < 973) {
+                if (y < 980) {
                     y += speed1;
                 }
                 break;
@@ -70,7 +70,7 @@ public class Player {
                 }
                 break;
             case RIGHT:
-                if (x<1811) {
+                if (x<1820) {
                     x += speed1;
                 }
                 break;
@@ -79,9 +79,9 @@ public class Player {
         }
     }
 
-    public void mapmove(){     // метод движения фона
+    public void mapmove(){
         mapX-=speedMap;
-    }
+    }     // метод движения фона
 
 
     public int getX() {
@@ -93,9 +93,9 @@ public class Player {
     public int getmapX() {
         return mapX;
     }  //  фона
-    public int distance(int x,int y){   // функция, возвращающая расстояние до игрока
+    public int distance(int x,int y){
         return (int)Math.sqrt((this.x+50-x)*(this.x+50-x)+(this.y+50-y)*(this.y+50-y));
-    }
+    }                 // функция, возвращающая расстояние до игрока
     void replay(){   // "обнуление" всех переменных для новой игры
         mapX=0;
         x=50;

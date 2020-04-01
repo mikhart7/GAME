@@ -5,7 +5,7 @@ public class Ship {
     int dy = 0;
     boolean b = true; // отвечает за существование корабля (сбит или нет)
     Bullet shipbullets [] = new Bullet[25]; // у каждого корабля свой массив пуль
-    int  c = 0; // номер корабля который появляется из-за экрана справа
+    int  c = 0; // количество выпущенных пуль
 
     public Ship(int x, int y) {    //
         this.x = x;                // конструктор корабля
@@ -22,7 +22,7 @@ public class Ship {
     public int distance(int x,int y){  // функция, возвращающая расстояние до корабля
         return (int)Math.sqrt((this.x+50-x)*(this.x+50-x)+(this.y+50-y)*(this.y+50-y));
     }
-    void replay(){ // "обнуление" всех переменных для новой игры
+    void replay(){ // "обнуление"  для новой игры
         dy=0;
         c=0;
         b=true;
