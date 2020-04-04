@@ -57,7 +57,7 @@ public class Main extends JPanel implements ActionListener  {   // наслед�
     public void mouseMoved(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        if(x>=800 && x<=1100 && y>=250 && y<=350) {
+        if(x>=800 && x<=1100 && y>=300 && y<=400) {
             h=1;
         }
         else{
@@ -72,7 +72,7 @@ MouseListener mouse1 = new MouseListener() {
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        if(x>=800 && x<=1100 && y>=250 && y<=350) {
+        if(x>=800 && x<=1100 && y>=300 && y<=400) {
             b = true;
         }
 
@@ -120,14 +120,16 @@ MouseListener mouse1 = new MouseListener() {
     if(b==false){  // меню
         g.drawImage(m,0,0,1920,1080,null);  // фон меню
         g.setColor(Color.darkGray);
-        g.fillRect(800,250,300,100);   // прямоугольник для надаиси
+        g.fillRect(800,300,300,100);   // прямоугольник для надаиси
         Font f = new Font("Impact", Font.BOLD, 100);
         g.setFont(f);
         g.setColor(Color.lightGray);        //
         if(h==1){                           // изменение цфета надписи от координат курсора мыши
             g.setColor(Color.WHITE);        //
         }
-        g.drawString("PLAY",850,335); // надпись
+        g.drawString("PLAY",850,385); // надпись
+        g.setColor(Color.cyan);
+        g.drawString("SPACE SHOOTER",600,150);
         g.drawImage(how,0,0,300,300,null);  // пояснения в управлении
 
     }
@@ -145,8 +147,8 @@ MouseListener mouse1 = new MouseListener() {
         g.setColor(Color.YELLOW);
         for (int i = 0; i < k; i++) {
             for (int j = 0; j < ships[i].shipbullets.length; j++) {
-                if (ships[i].shipbullets[j].x > -90) {  // удаление с карты пуль корабля за экраном
-                    if (j < ships[i].c && ships[i].shipbullets[j].b == true) {
+                if (ships[i].shipbullets[j].x > -90 ) {  // удаление с карты пуль корабля за экраном
+                    if (j < ships[i].c && ships[i].shipbullets[j].b == true ) {
                             if (i>18) {   // отрисовка пуль корабля в зависимости от его номера
                                 g.setColor(Color.green);
                                 g.fillRect(ships[i].x, ships[i].y+45, ships[i].shipbullets[j].x-ships[i].x-5, 5);
@@ -313,12 +315,15 @@ MouseListener mouse1 = new MouseListener() {
                         }
                     }
 
-                    if (ships[i].x < -110 && ships[i].b == true) {   // обработка несбитых кораблей, которые залетели за экран влево
+                    if (ships[i].x < -110 ) { // обработка несбитых кораблей, которые залетели за экран влево
+                        if(ships[i].b==true) {
+                       // S--;
+                    }
                         ships[i].b = false;
                         for(int g = 0;g<ships[i].shipbullets.length;g++){
                             ships[i].shipbullets[g].b=false;
                         }
-                        S--;
+
                     }
                 }
 
@@ -327,10 +332,11 @@ MouseListener mouse1 = new MouseListener() {
                         if (player.distance(ships[i].shipbullets[j].x, ships[i].shipbullets[j].y) <= 60 && ships[i].shipbullets[j].b == true ) {
                             ships[i].shipbullets[j].b = false;
                             n++;
+                            System.out.println(i);
                         }
                     }
                 }
-                if (n == 5) {    // при 5-ом попадание игрок сбит
+                if (n == 25) {    // при 5-ом попадание игрок сбит
                     player.b = false;
                 }
             }
