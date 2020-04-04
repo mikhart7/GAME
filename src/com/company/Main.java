@@ -336,7 +336,7 @@ MouseListener mouse1 = new MouseListener() {
                         }
                     }
                 }
-                if (n == 25) {    // при 5-ом попадание игрок сбит
+                if (n == 5) {    // при 5-ом попадание игрок сбит
                     player.b = false;
                 }
             }
