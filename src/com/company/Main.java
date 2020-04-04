@@ -317,7 +317,7 @@ MouseListener mouse1 = new MouseListener() {
 
                     if (ships[i].x < -110 ) { // обработка несбитых кораблей, которые залетели за экран влево
                         if(ships[i].b==true) {
-                       // S--;
+                        S--;
                     }
                         ships[i].b = false;
                         for(int g = 0;g<ships[i].shipbullets.length;g++){
