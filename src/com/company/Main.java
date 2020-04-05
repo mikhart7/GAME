@@ -147,23 +147,24 @@ MouseListener mouse1 = new MouseListener() {
         g.setColor(Color.YELLOW);
         for (int i = 0; i < k; i++) {
             for (int j = 0; j < ships[i].shipbullets.length; j++) {
-                if (ships[i].shipbullets[j].x > -90 ) {  // удаление с карты пуль корабля за экраном
-                    if (j < ships[i].c && ships[i].shipbullets[j].b == true ) {
-                            if (i>18) {   // отрисовка пуль корабля в зависимости от его номера
+                    if (j < ships[i].c ) {
+                        if (ships[i].shipbullets[j].b == true) {
+                            if (i > 18) {   // отрисовка пуль корабля в зависимости от его номера
+                                if (ships[i].shipbullets[j].x > -90 ) {
                                 g.setColor(Color.green);
-                                g.fillRect(ships[i].x, ships[i].y+45, ships[i].shipbullets[j].x-ships[i].x-5, 5);
+                                g.fillRect(ships[i].x+5, ships[i].y + 45, ships[i].shipbullets[j].x - ships[i].x - 5, 5);
                             }
-                            else {
+                            } else {
                                 g.fillOval(ships[i].shipbullets[j].x, ships[i].shipbullets[j].y, 12, 12);
                             }
                         }
-
+                    }
                     else {      // координаты невыпущенных пуль корабля равны коррдинатам "носа" корбля
                         ships[i].shipbullets[j].x = ships[i].x + 5;
                         ships[i].shipbullets[j].y = ships[i].y + 45;
                     }
                 }
-            }
+
 
                 if (ships[i].b == true) {
                     if(i>18){      // отрисовка корябля в зависимости от его номера
@@ -179,9 +180,8 @@ MouseListener mouse1 = new MouseListener() {
 
           g.setColor(Color.red);
         for (int i = 0; i < bullets.length; i++) {
-            if(bullets[i].x<2000){  // удаление с карты пуль игрока за экраном
             if (i < c) {
-                if (bullets[i].b == true) {   // отрисока пуль игрока
+                if (bullets[i].b==true) {   // отрисока пуль игрока
                     g.fillRect(bullets[i].x, bullets[i].y, 25, 5);
                 }
             } else {      // координаты невыпущенных пуль корабля равны коррдинатам "носа" игрока
@@ -190,7 +190,7 @@ MouseListener mouse1 = new MouseListener() {
             }
         }
 
-        }
+
 
 
         g.drawImage(r,player.getmapX() + 14000, 900, 200, 200,null);  // отрисовка флага
@@ -228,7 +228,7 @@ MouseListener mouse1 = new MouseListener() {
 
                 if (bullets[0] == null) {
                     for (int i = 0; i < bullets.length; i++) {
-                        bullets[i] = new Bullet(player.getX() + 70, player.getY() + 50, 8, -333);
+                        bullets[i] = new Bullet(player.getX() + 70, player.getY() + 45, 8, -333);
                         bullets[i].b=true;
                     }
                 }   // создание пуль игрока
@@ -284,7 +284,7 @@ MouseListener mouse1 = new MouseListener() {
 
                 for (int i = 0; i < k; i++) {
                     for(int I = 0;I<c;I++ ){
-                        if(ships[i].x-bullets[I].x<150 && Math.abs(ships[i].y+50 - bullets[I].y)<=70 && (i+1)%5==0 && i!=0){ // каждый 5 корабль будет уходть от пуль вверх или вниз
+                        if(ships[i].x-bullets[I].x<150 && Math.abs(ships[i].y+50 - bullets[I].y)<=50 && (i+1)%6==0 && i!=0 && bullets[I].b==true){ // каждый 6 корабль будет уходть от пуль вверх или вниз
                           if(ships[i].y+50 - bullets[I].y>=0) {                          // в зависимости от разности координат корабля и пули игрока по вертикали
                               ships[i].dy = 3;
                           }
@@ -313,30 +313,42 @@ MouseListener mouse1 = new MouseListener() {
                                 }
                             }
                         }
+
+                        if(bullets[j].x>2000){  // удаление с карты пуль игрока за экраном
+                            bullets[j].b=false;
+                        }
+                    }
+
+                    for(int g = 0;g<ships[i].c;g++){// удаление с карты пуль корабля за экраном
+                        if(ships[i].shipbullets[g].x<-110)
+                        ships[i].shipbullets[g].b=false;
                     }
 
                     if (ships[i].x < -110 ) { // обработка несбитых кораблей, которые залетели за экран влево
                         if(ships[i].b==true) {
-                        S--;
+                       // S--;
                     }
                         ships[i].b = false;
-                        for(int g = 0;g<ships[i].shipbullets.length;g++){
-                            ships[i].shipbullets[g].b=false;
-                        }
-
                     }
                 }
 
                 for (int i = 0; i < k; i++) {   // обработка попаданий в игрока
                     for (int j = 0; j < ships[i].c; j++) {
-                        if (player.distance(ships[i].shipbullets[j].x, ships[i].shipbullets[j].y) <= 60 && ships[i].shipbullets[j].b == true ) {
-                            ships[i].shipbullets[j].b = false;
-                            n++;
-                            System.out.println(i);
+                        if (i<=18) {
+                            if (player.distance(ships[i].shipbullets[j].x, ships[i].shipbullets[j].y) <= 60 && ships[i].shipbullets[j].b == true) {
+                                ships[i].shipbullets[j].b = false;
+                                n++;
+                            }
+                        }
+                        else{
+                            if( Math.abs(player.getY()+50 - ships[i].shipbullets[j].y)<=50  && ships[i].shipbullets[j].b == true && player.getX()+140<ships[i].x && player.getX()+110>=ships[i].shipbullets[j].x){
+                                ships[i].shipbullets[j].b = false;
+                                n++;
+                            }
                         }
                     }
                 }
-                if (n == 5) {    // при 5-ом попадание игрок сбит
+                if (n == 15) {    // при 5-ом попадание игрок сбит
                     player.b = false;
                 }
             }
