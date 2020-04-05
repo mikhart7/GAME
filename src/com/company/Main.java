@@ -326,7 +326,7 @@ MouseListener mouse1 = new MouseListener() {
 
                     if (ships[i].x < -110 ) { // обработка несбитых кораблей, которые залетели за экран влево
                         if(ships[i].b==true) {
-                       // S--;
+                        S--;
                     }
                         ships[i].b = false;
                     }
@@ -348,7 +348,7 @@ MouseListener mouse1 = new MouseListener() {
                         }
                     }
                 }
-                if (n == 15) {    // при 5-ом попадание игрок сбит
+                if (n == 5) {    // при 5-ом попадание игрок сбит
                     player.b = false;
                 }
             }
