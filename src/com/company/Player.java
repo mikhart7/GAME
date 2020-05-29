@@ -2,6 +2,7 @@ package com.company;
 
 import com.sun.javafx.scene.traversal.Direction;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class Player {
@@ -11,6 +12,7 @@ public class Player {
     int mapX = 0;             //  фона
     private int speedMap = 1;  //
     int t=0;      // показывает направление игрока, чтобы пуля летела по инерции
+    int m = 0; // для топлива
     boolean b = true;   // отвечает за существование игрока (сбит или нет)
     int g=0;  // отвечает за количество пуль
     int p=0;  // отвечает за паузу
@@ -19,10 +21,12 @@ public class Player {
     public void keyPressed(KeyEvent e) {          // обработка нажатия клавиш
         int key = e.getKeyCode();
         if(key == KeyEvent.VK_A ) {                // изменение playerDirection в зависимости
-            playerDirection = Direction.LEFT;      // от нажатой клавиши
+            playerDirection = Direction.LEFT;
+            m=-1;// от нажатой клавиши
         }
         if(key == KeyEvent.VK_D) {
             playerDirection = Direction.RIGHT;
+            m=1;
         }
         if(key == KeyEvent.VK_W ) {
             playerDirection = Direction.UP;
@@ -47,7 +51,7 @@ public class Player {
     public void keyReleased(KeyEvent e) {  //  обработка отпускания клавиш(реализовано нажатие)
         playerDirection=Direction.NEXT;
         t=0;
-
+        m=0;
     }
 
 
@@ -82,7 +86,6 @@ public class Player {
     public void mapmove(){
         mapX-=speedMap;
     }     // метод движения фона
-
 
     public int getX() {
         return x;

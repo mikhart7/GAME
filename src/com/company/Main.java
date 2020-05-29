@@ -3,6 +3,7 @@ package com.company;
 
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 
 public class Main extends JPanel implements ActionListener  {   // наследования от JPanel и реализация ActionListener
@@ -35,19 +36,15 @@ public class Main extends JPanel implements ActionListener  {   // наслед�
         b=false;
         timer.restart(); // перезапускаем время
     }    // "обнуление"  для новой игры
-
-
     Player player = new Player();      // создаём игрока
         Ship[] ships = new Ship[30] ; // массив кораблей
         int k = 0;            // количество кораблей, появившихся на экране
-        Bullet [] bullets = new Bullet[36]; // массив пуль игрока
+        Bullet [] bullets = new Bullet[36];// массив пуль игрока
         int c = 0;            // количество пуль игрока, появившихся на экране
         int n=0;             //
         boolean b = false;  // игра или меню?
         int S = 3;
         int h =0;        // отвечает за измениние цвета надписи "PLAY" при перемещение курсора мыши
-
-
     MouseMotionListener mouse2 = new MouseMotionListener() {
     @Override
     public void mouseDragged(MouseEvent e) {
@@ -96,7 +93,6 @@ MouseListener mouse1 = new MouseListener() {
 
 };
 
-
     JFrame frame;
     public Main(JFrame frame) {    // конструктор Main от рамки класса Game
     addMouseListener(mouse1);                         // добавляем обработку нажатия
@@ -144,6 +140,17 @@ MouseListener mouse1 = new MouseListener() {
         g.drawString(""+(bullets.length-1-c),100,1025);   // количество оставшихся пуль
         g.drawString(""+S,80,80);  // количество кораблей, которые могут пролететь за экран влево
 
+        g.setColor(Color.red);
+        for (int i = 0; i < bullets.length; i++) {
+            if (i < c) {
+                if (bullets[i].b==true) {   // отрисока пуль игрока
+                    g.fillRect(bullets[i].x, bullets[i].y, 25, 5);
+                }
+            } else {      // координаты невыпущенных пуль корабля равны коррдинатам "носа" игрока
+                bullets[i].x = player.getX() + 70;
+                bullets[i].y = player.getY() + 45;
+            }
+        }
         g.setColor(Color.YELLOW);
         for (int i = 0; i < k; i++) {
             for (int j = 0; j < ships[i].shipbullets.length; j++) {
@@ -175,44 +182,53 @@ MouseListener mouse1 = new MouseListener() {
                     }
                 }
             }
-
-
-
-          g.setColor(Color.red);
-        for (int i = 0; i < bullets.length; i++) {
-            if (i < c) {
-                if (bullets[i].b==true) {   // отрисока пуль игрока
-                    g.fillRect(bullets[i].x, bullets[i].y, 25, 5);
-                }
-            } else {      // координаты невыпущенных пуль корабля равны коррдинатам "носа" игрока
-                bullets[i].x = player.getX() + 70;
-                bullets[i].y = player.getY() + 45;
-            }
-        }
-
-
-
-
         g.drawImage(r,player.getmapX() + 14000, 900, 200, 200,null);  // отрисовка флага
-        g.drawImage(imgpl, player.getX(), player.getY(), 100, 100, null);    // отрисовка игрока
-
+      if(player.m==0) {
+          g.setColor(Color.red);
+          g.fillRect(player.getX() + 5, player.getY() + 34, -15, 6);
+          g.fillRect(player.getX() + 5, player.getY() + 61, -15, 6);
+          g.setColor(Color.yellow);
+          g.fillRect(player.getX() - 10, player.getY() + 33, -20, 7);
+          g.fillRect(player.getX() - 10, player.getY() + 61, -20, 7);
       }
-    }
+          if (player.m == 1) {
+              g.setColor(Color.red);
+              g.fillRect(player.getX() + 5, player.getY() + 34, -20, 6);
+              g.fillRect(player.getX() + 5, player.getY() + 61, -20, 6);
+              g.setColor(Color.yellow);
+              g.fillRect(player.getX() - 15, player.getY() + 33, -30, 7);
+              g.fillRect(player.getX() - 15, player.getY() + 60, -30, 7);
+          }
+          g.drawImage(imgpl, player.getX(), player.getY(), 100, 100, null);    // отрисовка игрока
+        Font f2 = new Font("Impact", Font.BOLD, 100);
+        g.setFont(f2);
+        if (player.getX() - 50 >= player.getmapX() + 14000 ) {
+            g.setColor(Color.ORANGE);
+            g.drawString("We saved our base",550,300);
+            }
+        g.setColor(Color.gray);
+        if( player.b == false ){
+            g.drawString("We died",800,300);
+        }
+        if(S == 0){
+            g.drawString("They are capturing our second base",150,300);
+        }
+        }
+      }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {  // метод, который выполнятся каждые 8 милисекунды(delay(задержка) таймера)
             if(b == true && player.p % 2 == 0) { // если игра(не меню) и не пауза
-
                 if (player.getX() - 50 >= player.getmapX() + 14000 || player.b == false || S == 0 ) {
+                        try {
+                            Thread.sleep(3500);
+                        } catch (InterruptedException ex) { // замедление перед появлением меню посде конца игры
+                            ex.printStackTrace();
+                        }
+                        replay(); // "перезапуск"
 
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException ex) { // замедление перед появлением меню посде конца игры
-                        ex.printStackTrace();
-                    }
-                    replay(); // "перезапуск"
-
-                }   // условия конца игры (координаты игрока рядом с финишем(флагом), игрок сбит, 3 несбитых корабля залетели за экран влево, закончились пули)
+                    }   // условия конца игры (координаты игрока рядом с финишем(флагом), игрок сбит, 3 несбитых корабля залетели за экран влево, закончились пули)
 
                 if (ships[0] == null) {
                     for (int i = 0; i < ships.length; i++) {
@@ -220,7 +236,7 @@ MouseListener mouse1 = new MouseListener() {
                         for (int j = 0; j < ships[i].shipbullets.length; j++) {
                             ships[i].shipbullets[j] = new Bullet(ships[i].x + 5, ships[i].y + 45, -8, 0);
                                if (i>18) {
-                                 ships[i].shipbullets[j].dx=-16;
+                                 ships[i].shipbullets[j].dx=-20;
                             }
                         }
                     }
@@ -235,6 +251,7 @@ MouseListener mouse1 = new MouseListener() {
                 if(bullets.length-1-c>0) {
                     c = player.g;   // количество выпущенных пуль игрока
                 }
+
                 if( -player.getmapX()<=7500) {
                     if(-player.getmapX() % 450 == 0) {
                         k++;
@@ -254,7 +271,7 @@ MouseListener mouse1 = new MouseListener() {
                     }
                 }     //  (при приближении к финишу это количество растёт быстрее)
 
-                    if (-player.getmapX() % 200 == 0 ) {
+                    if (-player.getmapX() % 180 == 0 ) {
                     for (int i = 0; i < k; i++) {
                         if (ships[i].b == true && i<=18) {
                             ships[i].shipbullets[ships[i].c].b=true;
@@ -262,7 +279,7 @@ MouseListener mouse1 = new MouseListener() {
                         }
                     }
                 } // количество выпущенных пуль корабля
-                if (-player.getmapX() % 350 == 0 ) {
+                if (-player.getmapX() % 250 == 0 ) {
                     for (int i = 0; i < k; i++) {
                         if (ships[i].b == true && i>18) {
                             ships[i].shipbullets[ships[i].c].b=true;
@@ -282,29 +299,9 @@ MouseListener mouse1 = new MouseListener() {
                     bullets[i].move();    //вызов перемещения пуль игрока
                 }
 
-                for (int i = 0; i < k; i++) {
-                    for(int I = 0;I<c;I++ ){
-                        if(ships[i].x-bullets[I].x<150 && Math.abs(ships[i].y+50 - bullets[I].y)<=50 && (i+1)%6==0 && i!=0 && bullets[I].b==true){ // каждый 6 корабль будет уходть от пуль вверх или вниз
-                          if(ships[i].y+50 - bullets[I].y>=0) {                          // в зависимости от разности координат корабля и пули игрока по вертикали
-                              ships[i].dy = 3;
-                          }
-                          else{
-                              ships[i].dy = -3;
-                          }
-                        }
-                        else{
-                            ships[i].dy=0;
-                        }
-                    }
-                    ships[i].move();     //вызов перемещения корабля
-                    for (int j = 0; j < ships[i].c; j++) {
-                        ships[i].shipbullets[j].move();   //вызов перемещения пуль корабля
-                    }
-                }
-
                 for (int i = 0; i < k; i++) { // сбивания корабля
                     for (int j = 0; j < c; j++) {
-                        if (ships[i].distance(bullets[j].x, bullets[j].y) <= 60 && bullets[j].b == true && ships[i].b == true) {
+                        if (ships[i].distance(bullets[j].x, bullets[j].y) <= 50 && bullets[j].b == true && ships[i].b == true) {
                             bullets[j].b = false;
                             ships[i].b = false;
                             if (i>18){
@@ -332,6 +329,25 @@ MouseListener mouse1 = new MouseListener() {
                     }
                 }
 
+                for (int i = 0; i < k; i++) {
+                    for(int I = 0;I<c;I++ ){
+                        if(ships[i].x-bullets[I].x<370 && Math.abs(ships[i].y+50 - bullets[I].y)<=45 && (i+1)%6==0 && i!=0 && bullets[I].b==true){ // каждый 6 корабль будет уходть от пуль вверх или вниз
+                            if(ships[i].y+50 - bullets[I].y>=0 ) {                          // в зависимости от разности координат корабля и пули игрока по вертикали
+                                ships[i].dy = 3;
+                            }
+                            else{
+                                ships[i].dy = -3;
+                            }
+                        }
+                        else{
+                            ships[i].dy=0;
+                        }
+                    }
+                    ships[i].move();     //вызов перемещения корабля
+                    for (int j = 0; j < ships[i].c; j++) {
+                        ships[i].shipbullets[j].move();   //вызов перемещения пуль корабля
+                    }
+                }
                 for (int i = 0; i < k; i++) {   // обработка попаданий в игрока
                     for (int j = 0; j < ships[i].c; j++) {
                         if (i<=18) {
@@ -341,7 +357,7 @@ MouseListener mouse1 = new MouseListener() {
                             }
                         }
                         else{
-                            if( Math.abs(player.getY()+50 - ships[i].shipbullets[j].y)<=50  && ships[i].shipbullets[j].b == true && player.getX()+140<ships[i].x && player.getX()+110>=ships[i].shipbullets[j].x){
+                            if( Math.abs(player.getY()+50 - ships[i].shipbullets[j].y)<=60  && ships[i].shipbullets[j].b == true && player.getX()+140<ships[i].x && player.getX()+110>=ships[i].shipbullets[j].x){
                                 ships[i].shipbullets[j].b = false;
                                 n++;
                             }
@@ -352,8 +368,7 @@ MouseListener mouse1 = new MouseListener() {
                     player.b = false;
                 }
             }
-
             repaint();  // перерисовка
     }
 
-}
+  }

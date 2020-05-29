@@ -4,7 +4,7 @@ public class Ship {
     public int dx= 5; // изменение координаты по x
     int dy = 0;
     boolean b = true; // отвечает за существование корабля (сбит или нет)
-    Bullet shipbullets [] = new Bullet[25]; // у каждого корабля свой массив пуль
+    Bullet shipbullets [] = new Bullet[6]; // у каждого корабля свой массив пуль
     int  c = 0; // количество выпущенных пуль
 
     public Ship(int x, int y) {    //
@@ -15,8 +15,9 @@ public class Ship {
 
     public void move() {   // метод движения корабля
         x -= dx;
-        y+=dy;
-
+        //if(y+dy <980 && y+dy>2) {
+            y += dy;
+       // }
     }
 
     public int distance(int x,int y){  // функция, возвращающая расстояние до корабля
